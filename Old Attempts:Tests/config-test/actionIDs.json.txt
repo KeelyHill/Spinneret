@@ -1,0 +1,28 @@
+[
+  {
+  "location.class": "autohome.actions.TurnOn",
+  "displayName": "Turn On",
+  "description": "Turns the thing on".
+  },
+  {
+  "location.class": "autohome.actions.TurnOff",
+  "displayName": "Turn Off",
+  "description": "Turns the thing off."
+  },
+  {
+  "location.class": "autohome.actions.Wait",
+  "displayName": "Wait",
+  "description": "Waits time in seconds.",
+  "params": {"Wait" : None}
+  },
+  {
+  "location.class": "autohome.actions.DimTo",
+  "displayName": "Dim To",
+  "description": "Dims to a percentage."
+  },
+  {
+  "location.class": "autohome.actions.DimToOverTime",
+  "displayName": "Dim To Over Time",
+  "description": "Dims to a percentage over a certain amount of time."
+  }
+]

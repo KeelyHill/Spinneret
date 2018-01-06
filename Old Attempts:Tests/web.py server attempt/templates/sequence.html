@@ -1,0 +1,101 @@
+$def with (head, sequence)
+
+$:head
+
+<head>
+
+<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+
+<script>
+		$$(function() {
+	   	  
+	    var newActionPopup = $$( "#action-form" )
+	   
+		newActionPopup.dialog({
+			autoOpen: false,
+			height: 300,
+			width: 350,
+			modal: true,
+			buttons: {
+				"This has barly a function.": null,
+				Cancel: function() {
+					newActionPopup.dialog( "close" );
+				}
+			},
+			close: function() {
+			
+			}
+		});
+	   
+		$$( "#newAction" ).button().on( "click", function() {
+			newActionPopup.dialog( "open" );
+	    });
+	});
+</script>
+</head>
+
+<div id="action-form" title="Create new user" style="background-color:grey">
+	<p>all this really does is show up.</p>
+	<form>
+		<input type="hidden" name='type' value='sequence.newAction' >
+		<input type="hidden" name='data' value='' >
+		
+		<fieldset>
+			<label for="name">Name</label>
+			<input type="text" name="name" id="name" value="Jane Smith" class="text ui-widget-content ui-corner-all">
+			<label for="email">Email</label>
+			<input type="text" name="email" id="email" value="jane@smith.com" class="text ui-widget-content ui-corner-all">
+			<label for="password">Password</label>
+			<input type="password" name="password" id="password" value="xxxxxxx" class="text ui-widget-content ui-corner-all">
+
+			<!-- Allow form submission with keyboard without duplicating the dialog button -->
+			<input type="submit" tabindex="-1" style="position:absolute; top:-1000px" value="GO">
+		</fieldset>
+	</form>
+</div>
+
+$def is_number(s):
+	try:
+		float(s)
+		return True
+	except ValueError:
+		return False
+
+<div>
+	
+	<!-- Back Button -->
+	<input type="Button" value="&#8592; Save & Back" onclick="actionFormsToJSONWithSequenceName('actions', '$sequence.name')" style="float:left;" />
+	
+	<!-- New Button -->
+	<input style="float:right;" value="New Action" type="Button" id="newAction"/>
+	
+	</br>
+	
+	<h2><u>$sequence.name:</u></h2>
+	
+		
+	$ actions = sequence.actionsList
+	$ posCount = 0
+	
+		$for action in actions:
+			$ posCount += 1
+			<form method="" name="actions"><fieldset>
+				<legend><h3>($posCount) $action.name</h3></legend>
+				Location<select>
+					<option value="Kitchen">Kitchen</option>
+					<option value="Bedroom-01">Bedroom-01</option>
+				</select>(ex)
+				</br>
+				$ dict = action.getArgs()
+				$for key, value in dict.iteritems():
+					$ iType = 'text'
+					$ if is_number(value): inType = 'number'
+					$key.capitalize(): <input type="$inType" value="$value" name="$key">
+					</br>
+			</fieldset>
+			</form>
+	
+	</br></br>
+	
+
+</div>

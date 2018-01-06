@@ -1,0 +1,21 @@
+$def with (head, sequences)
+
+$:head
+
+<!-- CONTENT -->
+<div>
+	
+	$for sequence in sequences:
+		<div>
+		
+		<form name="main" method="post">
+			$sequence.name
+			<input type="button" value="Run Sequence" onclick="POST('sequence.name','$sequence.name')"/>
+			<input type="hidden" name='type' value='sequence.edit' >
+			<input type="hidden" name='data' value='$sequence.name' >
+			<input type="submit" value="Edit"></form>
+		</div>
+		
+	
+
+</div>

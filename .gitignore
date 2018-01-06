@@ -1,0 +1,7 @@
+
+# this contains test stuff, other's libraries/example code (things that are not mine and thus don't need to be here)
+Helpful-Reasource-Files/
+
+venv/
+__pycache__/
+Development Journal.md

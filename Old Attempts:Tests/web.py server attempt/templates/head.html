@@ -1,0 +1,50 @@
+<head>
+	<title>Home Server</title>
+	
+	<link rel="stylesheet" type="text/css" href="static/styles.css">
+	
+	<link rel="stylesheet" type="text/css" href="static/jquery-ui.min.css">
+			
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	
+	<script>
+	
+		function POST(type, data){
+			jQuery.ajax({
+				type: "POST",
+				data: {data : data, type : type}
+			});
+		}
+	
+
+		$$.fn.serializeObject = function() {
+			var o = {};
+			var a = this.serializeArray();
+			$$.each(a, function() {
+				if (o[this.name] !== undefined) {
+					if (!o[this.name].push) {
+						o[this.name] = [o[this.name]];
+					}
+						o[this.name].push(this.value || '');
+					} else {
+						o[this.name] = this.value || '';
+					}
+				});
+				return o;
+		};
+			
+		function actionFormsToJSONWithSequenceName(name, seqName) {
+			var forms = $$('form[name="' + name + '"]')
+			var formJSONData = []
+			for (i = 0; i < forms.length; i++) {
+				formJSONData.push($$(forms[i]).serializeObject());
+			}
+			POST("sequence.save", JSON.stringify(seqName + ':' + JSON.stringify(formJSONData)))
+			window.location = "/"
+		}
+
+	</script>
+		
+</head>
+
+</br>

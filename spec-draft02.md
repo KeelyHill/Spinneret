@@ -22,8 +22,6 @@
 
 ## The Object Encoding (a possible lighter and specific alternative to json)
 
-Try to put in https://en.wikipedia.org/wiki/Extended_Backus–Naur_form #todo
-
 ### Encoding Design:
 
 Generic types -- `name (repr) = syntax --> example`
@@ -193,8 +191,6 @@ The payload and encryption
   - ex: `'v/id|RESP|xyz|abc|ACK|hbotr\x00'`
   - If the response code is `OK` then the payload is an encoded dictionary (which may only have one key-value pair) containing the keys of either the property name or the action name (prefixed with a '`^`') requested. The value for each key is the encoded value of the property or the returned value of the action.   
 
-For multi-part requests where there was an issue with a specific part (such as no permission for a property), a node SHOULD set the first byte of key's value to '`\x15`' indicating a problem without disruption. The requester is to assume they cannot access the property or run the action (i.e. `ds8:fakeprops1:\x15;`), the rest of the value MAY be an error message string #wip  
-
 For any other response codes, the payload is either a string description of the error or null.
   - Responses MUST NOT be _to_ a group, but rather the single node that made the request
   - When building a response, actions in a request MUST be dealt with first as their function may change the value of a property.
@@ -252,21 +248,20 @@ A node is seen by itself and all other nodes as an structure encapsulating data 
 
 A bare-bones operational node needs to store the address, two public keys, and version bytes of other nodes in the network. It must also store its own two key pairs, its address, the user key pair, the shared secret of the network(and any other secure groups, and the names of groups it belongs to), and its own actions and properties. Ideally, it would also contain the next hop to other nodes.
 
-Properties - readonly (or no-read) information specific to the node.
+**Properties** - readonly (or no-read) information specific to the node.
 
 - MUST have a name, type, value, and meta (null if no meta)
 - E.g. temperature, color, open (meaning: 'is open'), locked, direction, etc.
 - Property names starting with an underscore ( ` _ ` ) are private and never exposed in the public node structure. It serves as means to have private and persistent variables saved to local storage without implementing a custom means of storage. It can also be used to create a custom getter to add more logic.
 - Required properties #wip
-- ?later allow specific grants as readability by user #later #todo #wip
 
-Actions - operations specific to a node, runs a function, or does something. Can also be used as setters for properties.
+**Actions** - operations specific to a node, runs a function, or does something. Can also be used as setters for properties.
 
 - MUST have a `name` (for calling it), a `return` type (null if void).
 - MAY have "action parameters". Action parameters must have a descriptive `name`, `type`, and the standard `meta`
 - Example names: `setTemperature, turnOn, setColor`
 - Required Actions:  
-A node MUST have the following actions to perform their respective function -- like a standard library for system/network. These actions are not publicly exposed in the node's structure to the network, it is assumed that the node as them. The names are prefixed with an `X`(? #wip) to denote the speciality and avoid name conflicts. #wip
+A node MUST have the following actions to perform their respective function -- like a standard library for system/network. These actions are not publicly exposed in the node's structure to the network, it is assumed that the node as them. The names are prefixed with an `X`(?) to denote the speciality and avoid name conflicts. #wip
   - `^ping($nonce:i:n)` - responds with ACK and nonce value (may want to also include node's time) #wip
   - `^setTime($sec:i:n)` - unix time seconds of 'setting' node, it is up to the receiver node to half the ping-pong time of itself to the 'setting' node.
     - 1. Node receives a valid(i.e. signed) setTime() action request from 'setter'(a user) and stores it temporarily.
@@ -283,20 +278,19 @@ A node MUST have the following actions to perform their respective function -- l
   - `^beingNetRevoked()` - called out of courtesy of revoker when network key is being changed and the node is not to be included; acts as a gesture to the node to 'reset' its network settings and be available for discovery.
   - `^factoryReset()` -- will only run if user signature is valid, resets the node to the manufacture's or developers discretion.
   - Possible additions: `addUser(key);` signed by a current user to add other users.
-  - Considering an `SOS` type thing for announcements that nodes can use to request help in something to be used in extreme cases. #later #maybe
 
-Node Info (Node attributes?, info?, XInfo?) - a dictionary of (mostly optional) values -- working on better name
+**Node Info** (XInfo?) - a dictionary of (mostly optional) values -- working on better name
 
 - Required
     - `addr` - generated from the node's verifying (public signing) key - how the node is identified on the network
     - `kVerify` - bytes (base64?#maybe) of the node's verifying key
     - `kPublic` - public key (base64?#maybe) used for the KDF for decrypting node to node payloads.
     - `routing` - list/graph of nodes and/or connections for routing and spreading of routing. #wip
-    - `netTime` - unix time according to the network consensus and/or user setting #wip
+    - `netTime` - unix time according to the network consensus and/or user setting
     - `v` - string of version of protocol being used (`"x.x"`)
-    - `capabilities ` - list of strings of radios/capabilities (www,ip,wifi,bt,ir,rf,3g,zigbee,zwave,ethernet) - must at least have something #later #wip
+    - `capabilities ` - list of strings of radios/capabilities (www,ip,wifi,bt,ir,rf,3g,zigbee,zwave,ethernet)
 - Optional
-    - `groups` - list of group names the node is a part of. (This includes secure groups _names_ too), assumed empty if not presnet
+    - `groups` - list of group names the node is a part of. (This includes secure groups _names_ too), assumed empty if not present
     - `nick` - user set string as a nickname/alias for the node -- ('alias' more clear?)
     - `internetCapable`  - (bool) if a node has the ability to relay messages from other nodes to internet; assumes false
     - `defaultANNC` - the default group an announcement is broadcast too. Assumes '`*`' (all) is not specified.
@@ -310,7 +304,7 @@ Node Info (Node attributes?, info?, XInfo?) - a dictionary of (mostly optional) 
     - `defaultProp` - name of the property that best represents the node (for use in user interfaces) #maybe
     - `implements` - list of strings, each pre-determined string being associated with actions and/or properties that it conforms to (think: light,lock,phone,etc.) #maybe
     - `UIOrder` - list of property and action names in preferred order of displaying in a client's UI, client implementation recommend. #later #maybe
-    - `triggers` - dictionary of property names (and `Xtime` #wip) whose value is an array of "trigger dictionaries". #later
+    - `triggers` - dictionary of property names (and `Xtime`) whose value is an array of "trigger dictionaries". #later
 
 ### Meta
 
@@ -331,14 +325,14 @@ Allowed keys (full list a work in progress)
 - `range` - formatted "min..max" inclusive (i.e. `"range":"1..10"`) #maybe
 - `signed` - if false, can't be negative, assumes true; may implement with types instead #maybe
 - `emoji` - emoji char(s) representing thing as an icon (this is another way to deal with icons) #maybe
-- `icon_kind`? - pre-know/set categories of things with icons (i.e. light_switch, dish_washer, etc.), could be used for different states for thing too. #later #maybe
+- `icon_kind`? - pre-know/set categories of things with icons (i.e. light_switch, dish_washer, etc.), could be used for different states for thing too. #maybe
 - `icon`? - using binary base 64 data(may just say to use unicode and emojis in name/desc? - not image itself) #maybe
 
 Example (as json)
 
 - `{"min":15, "max":45, "unit":"c", "emoji":"\U0001F321"}`
 
-### Routing #wip
+### Routing
 
 Normal Routing #wip
 
@@ -361,8 +355,10 @@ Node Discovery - "Marco Polo"
 
 - 2. Interested nodes (without a network key), respond with a signed `POLO` broadcast directly to Alice containing the public-key encrypted with the user's public key payload: the entire node's data structure.
   - `\x00\x01|POLO|alice|[bob public_key]|node<...addr:'bob'...>`
+
 - 3. If the user decides to accept the node into the network, a final `ACPT` (#maybe `JOIN` instead) is signed, and sent containing the discoverer's public key and the bynar list encoded payload: the network's symmetric key, the new node's node structure signed by the user, and the user's (Alice's) node's data structure for network bootstrapping. The new node should also verify the address and keys against this node structure. In addition to sending, the user node MUST add the new node to its _known nodes_(i.e. cached nodes). <small>No other steps are taken for denying a node, simply don't accept it. A node must only respond once to a single `MARCO`</small>
   - `\x00\x01|ACPT|bob|[alice public key]|l[network key][node<alice...>][user signed new node struct bytes];`
+
 - 4. Once the new node receives the `ACPT`, it can then introduce(acquaint) itself to the network's nodes by transmitting a network-level encrypted and signed `AQUA` broadcast (inherently to all nodes) containing its node structure signed by the user that it received in the `ACPT`. This allows the other nodes to verify is entry intro the network beyond ownership of the network key.
   - `\x00\x01|ANNC|*|bob|node<...>`
 - Should anything go wrong during the Marco-Polo-Accept process (such as bad signature or some processing error), a new node that wishes to be added to the network SHOULD send an unencrypted error message for receiving by the user.  
@@ -388,7 +384,9 @@ Pseudo code: `base64_urlsafe_encode(sha256raw(sha256raw(verify_key)))[:7]`
 Networks are the primary setup for this system. A network is setup by a user. Things that are user set are signed by the user's key (separate from the key of the node used by the user -- e.g. computer/phone):
 
 - A node joins a network when it gets the symmetric key for network-level communication via encryption.
+
 - To revoke a node, a new key must be redistributed (may make this so each node has a separate "access key" to the network based on a key or hash or hash function depending on feasibility)
+
 - Allows a user to connect a phone/computer to the network via a "relay node" for commination and data gathering with the networked nodes (i.e. in physical presence or over an internet connected node)
 
 #### Users

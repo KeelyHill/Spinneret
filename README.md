@@ -12,7 +12,7 @@ See [Diagrams](#diagrams) section below for diagrams and [`spec-draft02.md`](spe
 
 Spinneret is a project that I have been thinking about and working on and off for at least 3 years now (in its current form). I have not dedicated time to improving or implementing it for about seven months. As I progressed through Uni, other things started taking priority. This became a bloated project.
 
-**I am nonetheless immensely proud of this project, learning a lot over the time working on it (despite things I would change[1] today). I would like to make it public and open source.** The code is extremely messy and all over the place, but the specification of the protocol is sound (although roughly written).
+**I am nonetheless immensely proud of this project, learning a lot over the time working on it (despite things I would change[1] today). I am making it public and open source.** The code is extremely messy and all over the place, but the specification of the protocol is sound (although roughly written at times).
 
 The initial and on going inspiration is the abundance of closed off, centralized 'IoT' ecosystems and protocols (from the WeMo, to industrial IoT, to the Amazon Echo today). I was trying to also avoid [XKCD 927](https://xkcd.com/927/) the best I could.
 

@@ -6,7 +6,7 @@
 
 *Elevator description:* Spinneret is a secure, peer-to-peer, semantic communication and remote call protocol. It defines "Nodes" with unique address and meaningful properties and procedures(actions). It also specifies a frame for secure communication between said nodes. It can operate on the application layer of IP, TCP, or other mesh-networking stacks (any RF, ZigBee, 802.15.4, Bluetooth).
 
-See [Diagrams](#Diagrams) section below for diagrams and [`spec-draft02.md`](spec-draft02.md) for the full description and spec.
+See [Diagrams](#diagrams) section below for diagrams and [`spec-draft02.md`](spec-draft02.md) for the full description and spec.
 
 ~
 
